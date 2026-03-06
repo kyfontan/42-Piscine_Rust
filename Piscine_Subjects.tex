@@ -1,0 +1,222 @@
+\documentclass[a4paper,12pt]{report}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{eso-pic}          % background on every page
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+
+\tcbuselibrary{skins,breakable}
+
+% ─── Colors ──────────────────────────────────────────────────────────────────
+\definecolor{warningbg}{RGB}{255,200,200}
+\definecolor{warningborder}{RGB}{220,80,80}
+\definecolor{infobg}{RGB}{200,210,255}
+\definecolor{infoborder}{RGB}{80,100,220}
+
+% ─── Background motif on every page ─────────────────────────────────────────
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \includegraphics[width=\paperwidth,height=\paperheight]{assets/motif.pdf}%
+  }%
+}
+
+% ─── Page style ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ─── Hyperref setup ──────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+}
+
+% ─── Warning box ─────────────────────────────────────────────────────────────
+\newtcolorbox{warningbox}{
+  colback=warningbg,
+  colframe=warningborder,
+  boxrule=0.5pt,
+  arc=0pt,
+  left=60pt,
+  right=10pt,
+  top=10pt,
+  bottom=10pt,
+  overlay={
+    \node[anchor=west] at ([xshift=12pt]frame.west)
+      {\includegraphics[width=30pt]{warning_icon}};
+  }
+}
+
+\newtcolorbox{infobox}{
+  colback=infobg,
+  colframe=infoborder,
+  boxrule=0.5pt,
+  arc=0pt,
+  left=60pt,
+  right=10pt,
+  top=10pt,
+  bottom=10pt,
+  overlay={
+    \node[anchor=west] at ([xshift=12pt]frame.west)
+      {\includegraphics[width=30pt]{info_icon}};
+  }
+}
+
+% ─── Generate warning / info icons via tikz ──────────────────────────────────
+\newsavebox{\warningiconbox}
+\savebox{\warningiconbox}{%
+  \includegraphics[width=30pt]{assets/warning.png}%
+}
+
+\newsavebox{\infoiconbox}
+\savebox{\infoiconbox}{%
+  \includegraphics[width=30pt]{assets/info.png}%
+}
+
+% ─── Redefine warning/info boxes with inline icons ──────────────────────────
+\renewtcolorbox{warningbox}{
+  colback=warningbg,
+  colframe=warningbg,
+  boxrule=0.5pt,
+  arc=0pt,
+  left=50pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  overlay={
+    \node[anchor=west] at ([xshift=8pt]frame.west) {\usebox{\warningiconbox}};
+  },
+  fontupper=\color{warningborder}
+}
+
+\renewtcolorbox{infobox}{
+  colback=infobg,
+  colframe=infobg,
+  boxrule=0.5pt,
+  arc=0pt,
+  left=50pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  overlay={
+    \node[anchor=west] at ([xshift=8pt]frame.west) {\usebox{\infoiconbox}};
+  },
+  fontupper=\color{infoborder}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ─── Title page (no page number) ────────────────────────────────────────────
+\thispagestyle{empty}
+
+\begin{center}
+  \vspace*{2cm}
+
+  \includegraphics[height=6cm]{assets/pillar.png}
+
+  \vspace{2cm}
+
+  {\Huge Piscines Rust: Quick presentation}
+
+  \vfill
+
+  \textit{Summary:}
+
+  \textit{Version: 1.00}
+
+  \vspace{4cm}
+\end{center}
+
+\newpage
+
+% ─── Table of contents ──────────────────────────────────────────────────────
+\thispagestyle{fancy}
+\tableofcontents
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter I — Piscine
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Piscine}
+
+What is a piscine?
+
+Much like the selection piscine, this project is split into many small projects (modules),
+with each day introducing a new concept in the language, paradigm, or technology you
+have chosen to work on. Validating a piscine requires more than just a day or two of
+commitment. To ensure that this piscine is completed correctly, it is recommended that
+you take note of everything listed below:
+
+\begin{itemize}[itemsep=8pt]
+  \item You can't validate the piscine if you work on only one or two projects.
+  \item Try to submit your work every day: even if something isn't finished, it's better to
+        submit what you have.
+  \item At least two weeks of work: beginning the piscine shouldn't be taken lightly.
+  \item Each initialized repository will be automatically closed after one day.
+  \item You have two days to complete the required peer evaluations for each module.
+  \item It is possible to retry modules without waiting.
+\end{itemize}
+
+\vspace{1em}
+
+\begin{warningbox}
+  \texttt{It is important not to work on these modules alone. For this reason,
+  it is highly recommended to approach these piscines with several
+  other students.}
+\end{warningbox}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter II — Instructions
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Instructions}
+
+To validate this piscine, you must complete the following projects:
+
+\begin{itemize}[itemsep=6pt]
+  \item RUST -- Basic syntax and ownership -- 0
+  \item RUST -- Primitives, control flow and functions -- 0
+  \item RUST -- Structs, enums and pattern matching -- 0
+  \item RUST -- Error handling and Option/Result -- 1
+  \item RUST -- Traits and generics -- 1
+  \item RUST -- Lifetimes and borrowing -- 1
+  \item RUST -- Collections and iterators -- 2
+  \item RUST -- Concurrency and multithreading -- 2
+  \item RUST -- Smart pointers and memory management -- 3
+  \item RUST -- Macros and metaprogramming -- 3
+\end{itemize}
+
+\vspace{0.5em}
+
+You must validate each project in the specified order. Indeed, it will not be possible
+to register for a project if the previous project has not been validated.
+
+\vspace{1em}
+
+\begin{infobox}
+  \texttt{You must be registered for this project.}
+\end{infobox}
+
+\vspace{1em}
+
+\begin{warningbox}
+  \texttt{It is important to refer to this document to access your projects.
+  You can click on each module on this page to access it or use the
+  list of projects available in your intra.}
+\end{warningbox}
+
+\end{document}
