@@ -30,8 +30,6 @@
 *.snm
 *.vrb
 
-
-
-
 # Other
 .DS_Store
+.vscode
