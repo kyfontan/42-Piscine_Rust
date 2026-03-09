@@ -23,19 +23,10 @@
 \vspace{0.5cm}
 
 \begin{itemize}[leftmargin=1.5em, itemsep=0.8em]
-    \item Your program should not crash in any circumstances (even when it runs out of memory), and should not quit unexpectedly.\\
+    \item Your program should not crash in any circumstances and should not quit unexpectedly.\\
     If it happens, your project will be considered non-functional and your grade will be 0.
-    
-    \item You have to turn in a \textcolor{blue}{\texttt{Makefile}} which will compile your source files. It must not relink.
-    
-    \item Your \textcolor{blue}{\texttt{Makefile}} must at least contain the rules:\\
-    \textcolor{blue}{\texttt{\$(NAME)}}, \textcolor{blue}{\texttt{all}}, \textcolor{blue}{\texttt{clean}}, \textcolor{blue}{\texttt{fclean}} and \textcolor{blue}{\texttt{re}}.
-    
-    \item Compile your code with \textcolor{blue}{\texttt{c++}} and the flags \textcolor{blue}{\texttt{-Wall -Wextra -Werror}}
-    
-    \item Your code must comply with the \textbf{C++ 98 standard}. Then, it should still compile if you add the flag \textcolor{blue}{\texttt{-std=c++98}}.
-    
-    \item Try to always develop using the most C++ features you can (for example, choose \textcolor{blue}{\texttt{<cstring>}} over \textcolor{blue}{\texttt{<string.h>}}). You are allowed to use C functions, but always prefer their C++ versions if possible.
-    
-    \item Any external library and Boost libraries are forbidden.
+    \item Your code must be written in Rust 1.93+
+    \item Your programs must respect clippy linter standards
+    \item Functions names must match exactly what is requested
+    \item Cargo is forbdiden, only rustc compiler is required
 \end{itemize}
