@@ -1,0 +1,7 @@
+[package]
+name = "module_06"
+version = "0.1.0"
+description = "Module 06"
+edition = "2024"
+
+[dependencies]
