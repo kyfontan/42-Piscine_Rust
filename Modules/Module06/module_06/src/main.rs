@@ -1,28 +1,21 @@
 pub mod logical;
+pub mod calc;
+
+pub struct Inputs {
+    i0: bool,
+    i1: bool,
+    i2: bool,
+    i3: bool
+}
 
 fn main() {
-    let bit1: bool = false;
-    let bit2: bool = true;
+    let inputs = Inputs {
+        i0: false,
+        i1: true,
+        i2: false,
+        i3: true
+    };
 
-    let tst = logical::nor(bit1, bit2);
-    println!("{}", tst);
+    let res = calc::multiplexer(inputs, true, true);
+    println!("{}", res);
 }
-
-
-/*
-a = true
-b = false
-
-and a et b:
-if a == true && b == true {
-    return true;
-}
-return false;
-
-
-not a:
-return !a
-
-not(and(a, b)) > true
-
-*/
