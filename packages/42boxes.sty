@@ -1,0 +1,45 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{42boxes}[2026/03/12 Custom boxes for 42 Piscine subjects]
+
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+
+% ─── Internal helper ────────────────────────────────────────────────────────
+\newcommand{\@ftbox}[3][\linewidth]{%
+  % #1 = width (default \linewidth)
+  % #2 = image filename (without path/extension)
+  % #3 = text content
+  \begin{center}
+    \begin{tikzpicture}
+      \node[anchor=south west, inner sep=0] (img) at (0,0)
+        {\includegraphics[width=#1]{assets/#2.png}};
+      \node[
+        anchor=west,
+        align=left,
+        text width=0.72#1,
+        font=\normalsize,
+        xshift=0.16#1,
+        yshift=0cm
+      ] at (img.west) {#3};
+    \end{tikzpicture}
+  \end{center}
+}
+
+% ─── Set pillar ────────────────────────────────────────────────────────
+
+\newcommand{\setbigpillar}[2][\linewidth]{%
+    \begin{figure}[htp]
+        \centering
+        \vspace{-2cm}
+        \includegraphics[width=6cm]{assets/pillar.png}
+    \end{figure}
+}
+
+% ─── Public commands ────────────────────────────────────────────────────────
+\newcommand{\warningbox}[2][\linewidth]{\@ftbox[#1]{warning}{#2}}
+\newcommand{\infobox}[2][\linewidth]{\@ftbox[#1]{info}{#2}}
+\newcommand{\goalbox}[2][\linewidth]{\@ftbox[#1]{goal}{#2}}
+\newcommand{\ideabox}[2][\linewidth]{\@ftbox[#1]{idea}{#2}}
+\newcommand{\tipsbox}[2][\linewidth]{\@ftbox[#1]{tips}{#2}}
+
+\endinput

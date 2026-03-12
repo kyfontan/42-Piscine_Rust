@@ -1,0 +1,32 @@
+% =============================================================================
+% TEMPLATE: Chapter with Rules List
+% Usage: Customize the chapter number, title, and list items as needed
+% 
+% Required packages in preamble:
+%   \usepackage{xcolor}
+%   \usepackage{enumitem}
+%   \usepackage{titlesec}  % Optional: for custom chapter/section styling
+% =============================================================================
+
+% --- Custom Commands (add to preamble) ---
+% \definecolor{ruleblue}{RGB}{0, 102, 204}
+% \newcommand{\code}[1]{\textcolor{ruleblue}{\texttt{#1}}}
+
+% --- Chapter Header ---
+% For article class, use \section*; for book/report class, use \chapter
+{\Large\bfseries Chapter II}
+
+\vspace{0.8cm}
+
+{\LARGE\bfseries General rules}
+
+\vspace{0.5cm}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.8em]
+    \item Your program should not crash in any circumstances and should not quit unexpectedly.\\
+    If it happens, your project will be considered non-functional and your grade will be 0.
+    \item Your code must be written in Rust 1.93+
+    \item Your programs must respect clippy linter standards
+    \item Functions names must match exactly what is requested
+    \item Cargo is required, toml must be contain [package] with name, version, description and keyswords
+\end{itemize}

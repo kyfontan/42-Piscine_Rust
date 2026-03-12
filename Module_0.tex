@@ -1,0 +1,502 @@
+\documentclass[a4paper,12pt]{report}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{tcolorbox}
+\usepackage{packages/42boxes}
+
+\renewcommand{\arraystretch}{1.4}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\addtolength{\cftchapnumwidth}{1em}
+
+\tcbset{
+  terminal/.style={
+    colback=black,
+    coltext=white,
+    colframe=black,
+    boxrule=0pt,
+    arc=2pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt,
+    fontupper=\ttfamily\small
+  }
+}
+
+% ─── Background motif on every page ─────────────────────────────────────────
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \includegraphics[width=\paperwidth,height=\paperheight]{assets/motif.pdf}%
+  }%
+}
+
+% ─── Page style ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ─── Hyperref setup ──────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+}
+
+% ─── Custom Boxes (Warning, Idea, Info, Goal) ───────────────────────────────
+\newcommand{\custombox}[3][\linewidth]{%
+  \begin{center}
+    \begin{tikzpicture}
+      \node[anchor=south west, inner sep=0] (img) at (0,0)
+        {\includegraphics[width=#1]{assets/#2.png}};
+      \node[
+        anchor=west,
+        align=left,
+        text width=0.72#1,
+        font=\normalsize,
+        xshift=0.16#1,
+        yshift=0cm
+      ] at (img.west) {#3};
+    \end{tikzpicture}
+  \end{center}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ─── Title page (no page number) ────────────────────────────────────────────
+\thispagestyle{empty}
+
+\begin{center}
+    \vspace*{2cm}
+
+    \setbigpillar
+
+    \vspace{2cm}
+
+    {\Huge Piscine Rust: Module 00}
+  
+    \vfill
+
+    \textit{Summary: First steps and core mechanics of the Rust language.}
+
+    \vspace{0.5cm}
+
+    \textit{Version: 1.00}
+
+    \vspace{4cm}
+\end{center}
+
+\newpage
+
+% ─── Table of contents ──────────────────────────────────────────────────────
+\thispagestyle{fancy}
+\tableofcontents
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter I — Piscine
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Preamble}
+
+Welcome to the first module of the Rust Piscine.
+
+This module serves as an introduction to the \texttt{Rust} programming language. Rust is a modern systems programming language designed to provide both high performance and strong memory safety guarantees. It focuses on reliability, efficient resource management, and preventing common classes of programming errors at compile time.
+
+The goal of this module is to help you become familiar with the fundamental concepts of the language.\newline
+Throughout this module, you will discover:
+
+\begin{itemize}
+\item the basic syntax of Rust;
+\item variables and immutability;
+\item functions;
+\item control flow structures;
+\item the type system;
+\item the first notions of ownership and borrowing.
+\end{itemize}
+
+Unlike many other programming languages, Rust introduces concepts that may initially seem unfamiliar. This piscine is designed to help you understand them progressively through practice. The exercises encourage experimentation and learning through implementation.
+
+\textbf{You are encouraged to carefully read the instructions, test your programs frequently, and consult the official documentation when necessary.}
+
+Learning Rust requires precision and attention to detail, but it provides powerful tools to write safe, efficient, and maintainable software.
+
+Good luck and enjoy the Rust Piscine.
+
+\begin{center}
+  \includegraphics[width=15cm]{assets/rust.png}
+\end{center}
+
+\vspace{0.5cm}
+
+Take care of your ownership\dots
+
+\newpage
+
+\chapter{General Rules}
+
+\vspace{0.5cm}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.8em]
+    \item Your program should not crash in any circumstances and should not quit unexpectedly.\\
+    If it happens, your project will be considered non-functional and your grade will be 0.
+    \item Your code must be written in Rust 1.93+
+    \item You must compile your programs with the following command to treat all warnings as errors, ensuring cleaner and safer code: \texttt{rustc -D warnings <file.rs>}.
+    \item Your programs must respect clippy linter standards.
+    \item Function names must match exactly what is requested.
+    \item Cargo is forbidden only for this module. Only the rustc compiler is authorized.
+    \item By Odin, by Thor! Use your brain!!!
+\end{itemize}
+
+\newpage
+
+\chapter{Exercise 00: Initial Spark}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 00: Initial Spark} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex00/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_hello.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+Write a Rust program that prints the message \texttt{Hello, World!} followed by a newline.
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{tcolorbox}[terminal]
+\$> ./ft\_hello \\
+Hello, World!
+\end{tcolorbox}
+
+The output must match exactly the expected result, including capitalization
+and punctuation.
+
+\warningbox{
+Be careful: any extra characters (spaces, additional text, missing newline,
+etc.) will cause the exercise to be considered incorrect.
+}
+
+\newpage
+
+\chapter{Exercise 01: Data Vault}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 01: Data Vault} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex01/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_variables.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+Write a program that declares a variable containing the value \texttt{42} and prints it to the standard output.
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_variables \\
+42
+\end{tcolorbox}
+\end{center}
+
+\ideabox{
+Rust variables are immutable by default.
+This means their value cannot be modified after initialization.
+}
+
+\newpage
+
+\chapter{Exercise 02: Fluid State}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 02: Fluid State} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex02/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_mut.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+\goalbox{
+The goal of this exercise is to understand how mutable variables work in Rust.
+}
+
+\vspace{0.5cm}
+
+In Rust, variables are immutable by default.  
+If you want to modify the value of a variable after its creation, you must declare it as \texttt{mut}.
+
+Write a program that:
+
+\begin{itemize}
+\item creates a variable with the value \texttt{5};
+\item prints its value;
+\item modifies the variable to contain \texttt{6};
+\item prints the new value.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_mut \\
+5 \\
+6
+\end{tcolorbox}
+\end{center}
+
+\newpage
+
+\chapter{Exercise 03: Variable Shadowing}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 03: Variable Shadowing} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex03/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_shadowing.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+\vspace{0.5cm}
+
+In Rust, you can declare a new variable with the same name as a previous variable. This is called \textit{shadowing}. Unlike the \texttt{mut} keyword, shadowing allows you to change the type of the value while reusing the exact same variable name.
+
+Write a program that:
+
+\begin{itemize}
+\item declares a variable containing the integer \texttt{42};
+\item prints its value;
+\item shadows this variable by declaring a new one with the same name, containing the string \texttt{"forty-two"};
+\item prints the new value.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_shadowing \\
+42 \\
+forty-two
+\end{tcolorbox}
+\end{center}
+
+\newpage
+
+\chapter{Exercise 04: Branch Paths}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 04: Branch Paths} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex04/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_branch.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+Write a program that declares a variable \texttt{number} initialized to \texttt{0}. Use conditional statements to evaluate this variable:
+\begin{itemize}
+\item if the number is strictly greater than 0, print \texttt{Positive};
+\item if the number is strictly less than 0, print \texttt{Negative};
+\item if the number is exactly 0, print \texttt{Zero}.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_branch \\
+Zero
+\end{tcolorbox}
+\end{center}
+
+\newpage
+
+\chapter{Exercise 05: Condition Loop}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 05: Condition Loop} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex05/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_while.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+\goalbox{
+Learn how to repeat actions using the \texttt{while} loop.
+}
+
+\vspace{0.5cm}
+
+Write a program that uses a \texttt{while} loop to print a countdown. The program must start at \texttt{3}, print each number down to \texttt{1}, and finally print \texttt{Go!}.
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_while \\
+3 \\
+2 \\
+1 \\
+Go!
+\end{tcolorbox}
+\end{center}
+
+\newpage
+
+\chapter{Exercise 06: Range Loop}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 06: Range Loop} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex06/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_for.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+\goalbox{
+Discover the \texttt{for} loop and how to iterate over a sequence of numbers using ranges.
+}
+
+\vspace{0.5cm}
+
+Write a program that uses a \texttt{for} loop to print all integers from \texttt{1} to \texttt{5} inclusive.
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_for \\
+1 \\
+2 \\
+3 \\
+4 \\
+5
+\end{tcolorbox}
+\end{center}
+
+\newpage
+
+\chapter{Exercise 07: Pattern Match}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Exercise \\ \hline
+\multicolumn{2}{|c|}{Exercise 07: Pattern Match} \\ \hline
+\multicolumn{2}{|l|}{Turn-in directory: \textit{ex07/}} \\ \hline
+\multicolumn{2}{|l|}{Files to turn in: \texttt{ft\_match.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed functions: \texttt{print!(), println!()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.8cm}
+
+\vspace{0.5cm}
+
+The \texttt{match} keyword in Rust is extremely powerful and must be exhaustive (all possible cases must be handled).
+
+Write a program that declares a variable containing the value \texttt{2}. Use a \texttt{match} statement to evaluate it and print:
+\begin{itemize}
+\item \texttt{One} if the value is 1;
+\item \texttt{Two} if the value is 2;
+\item \texttt{Three} if the value is 3;
+\item \texttt{Other} for any other value.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Expected output:}
+
+\begin{center}
+\begin{tcolorbox}[terminal]
+\$> ./ft\_match \\
+Two
+\end{tcolorbox}
+\end{center}
+
+\ideabox{
+The \texttt{\_} pattern acts as a default case. It matches anything that hasn't been specified in the previous arms.
+}
+
+\newpage
+
+\chapter{Turn in and Submission}
+
+\vspace{0.8cm}
+
+{\LARGE\bfseries Turn in and Submission}
+
+\vspace{0.5cm}
+
+Turn in all your files in a Git repository as usual. All files in your repository
+will be evaluated. Double-check your file names and make sure all required files are
+present in the repository.
+
+\warningbox{
+You must only turn in the files requested by the subject. Make sure you understand
+the Rust basics and be ready to correctly explain your code during evaluation.
+}
+
+\end{document}
