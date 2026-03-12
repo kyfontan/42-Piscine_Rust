@@ -31,5 +31,8 @@
 *.vrb
 
 # Other
+target
+.lock
 .DS_Store
 .vscode
+correction_templates
