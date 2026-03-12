@@ -1,0 +1,568 @@
+\documentclass[a4paper,12pt]{report}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage[table]{xcolor} % pour les couleurs
+\usepackage{tabularx}      % pour largeur automatique
+\usepackage{graphicx}      % pour les images
+\usepackage{booktabs}
+\renewcommand{\arraystretch}{1.4}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{tocloft}
+\usepackage{listings}
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+
+\addtolength{\cftchapnumwidth}{1em}
+
+% ─── Code listing style ─────────────────────────────────────────────────────
+\lstset{
+  language=,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  frame=single,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  xleftmargin=1em,
+  xrightmargin=1em,
+}
+
+% ─── Background motif on every page ─────────────────────────────────────────
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \includegraphics[width=\paperwidth,height=\paperheight]{assets/motif.pdf}%
+  }%
+}
+
+% ─── Page style ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ─── Hyperref setup ──────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+}
+
+% ─── Warning / Info boxes as image + text overlay ───────────────────────────
+\newcommand{\warningbox}[2][\linewidth]{%
+  \begin{center}
+    \begin{tikzpicture}
+      \node[anchor=south west, inner sep=0] (img) at (0,0)
+        {\includegraphics[width=#1]{assets/warning.png}};
+      \node[
+        anchor=west,
+        align=left,
+        text width=0.72#1,
+        font=\normalsize,
+        xshift=0.16#1,
+        yshift=0cm
+      ] at (img.west) {#2};
+    \end{tikzpicture}
+  \end{center}
+}
+
+% ─── Warning / Info boxes as image + text overlay ───────────────────────────
+\newcommand{\infobox}[2][\linewidth]{%
+  \begin{center}
+    \begin{tikzpicture}
+      \node[anchor=south west, inner sep=0] (img) at (0,0)
+        {\includegraphics[width=#1]{assets/info.png}};
+      \node[
+        anchor=west,
+        align=left,
+        text width=0.72#1,
+        font=\normalsize,
+        xshift=0.16#1,
+        yshift=0cm
+      ] at (img.west) {#2};
+    \end{tikzpicture}
+  \end{center}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ─── Title page (no page number) ────────────────────────────────────────────
+\thispagestyle{empty}
+
+\begin{center}
+    \vspace*{2cm}
+
+    \begin{figure}[htp]
+        \centering
+        \vspace{-2cm}
+        \includegraphics[width=6cm]{assets/pillar.png}
+    \end{figure}
+
+    \vspace{2cm}
+
+    {\Huge Piscine Rust: Module 06}
+  
+    \vfill
+
+    \textit{Summary: Boolean logic gates and arithmetic circuits in Rust.}
+
+    \vspace{0.5cm}
+
+    \textit{Version: 1.00}
+
+    \vspace{4cm}
+\end{center}
+
+\newpage
+
+% ─── Table of contents ──────────────────────────────────────────────────────
+\thispagestyle{fancy}
+\tableofcontents
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter I — General Rules
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{General Rules}
+
+\vspace{0.5cm}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.8em]
+    \item Your program should not crash in any circumstances and should not quit unexpectedly.\\
+    If it happens, your project will be considered non-functional and your grade will be 0.
+    \item Your code must be written in Rust 1.93+
+    \item You must compile your programs using \texttt{cargo run} and ensure there are no warnings or errors.
+    \item Your programs must respect clippy linter standards.
+    \item Functions names must match exactly what is requested.
+    \item You must use \textbf{Cargo} for this module. Your project must be initialized with \texttt{cargo new}.
+    \item Native logical operations implemented in Rust such as \texttt{\&\&}, \texttt{||} (both outside of if conditions), \texttt{\^{}} are strictly forbidden.
+    \item Only \texttt{\&\&} and \texttt{||} are allowed only in if conditions. 
+\end{itemize}
+
+\vspace{0.5cm}
+
+\subsection*{Cargo.toml Prerequisites}
+
+Your \texttt{Cargo.toml} must contain at minimum the following fields:
+
+\vspace{0.8cm}
+
+\begin{lstlisting}
+[package]
+name = "Module 0X"
+version = "x.x.x"
+description = "Description"
+edition = "20xx"
+
+[dependencies]
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.5em]
+    \item \texttt{name}: the name of your crate, must be \texttt{module\_06}.
+    \item \texttt{version}: semantic version of your project.
+    \item \texttt{description}: a short description of the module.
+    \item \texttt{edition}: must be set to \texttt{2024}.
+    \item No external dependencies are allowed.
+\end{itemize}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter II — Project Structure
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Project Structure}
+
+This module is a single Cargo project organized into several source files:
+
+\begin{lstlisting}
+module_06/
+  Cargo.toml
+  src/
+    main.rs
+    logical.rs
+    calc.rs
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.5em]
+    \item \texttt{main.rs} — Entry point. Declares the modules, the \texttt{Bits} struct and the \texttt{Byte} type alias.
+    \item \texttt{logical.rs} — Implements fundamental boolean logic gates.
+    \item \texttt{calc.rs} — Implements arithmetic circuits and routing components built on top of the logic gates.
+\end{itemize}
+
+\vspace{0.5cm}
+
+You must declare in \texttt{main.rs} the following public items:
+
+\begin{lstlisting}
+pub mod calc;
+pub mod logical;
+
+#[derive(Debug)]
+pub struct Bits {
+    i0: bool,
+    i1: bool,
+    i2: bool,
+    i3: bool,
+}
+\end{lstlisting}
+
+The \texttt{Bits} struct represents 4 boolean inputs/outputs used by the multiplexer and demultiplexer.
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter III — Part 1 : Basic Gates (NOT, AND, OR)
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Part 1 : Basic Gates}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Part 1 \\ \hline
+\multicolumn{2}{|c|}{Basic Gates: gate, not, and, or} \\ \hline
+\multicolumn{2}{|l|}{File : \texttt{src/logical.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed: boolean operators in if conditions} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.5cm}
+
+Implement the following functions in \texttt{logical.rs}:
+
+\subsection*{gate}
+The identity gate. Returns the input value unchanged.
+
+\begin{lstlisting}
+pub fn gate(bit: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{Input} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{not}
+Returns the logical negation of the input.
+
+\begin{lstlisting}
+pub fn not(bit: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{Input} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} \\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+
+\subsection*{and}
+Returns \texttt{true} if \textbf{both} inputs are \texttt{true}.
+
+\begin{lstlisting}
+pub fn and(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{true} \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{or}
+Returns \texttt{true} if \textbf{at least one} input is \texttt{true}.
+
+\begin{lstlisting}
+pub fn or(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{true} \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter IV — Part 2 : Derived Gates (XOR, NAND, NOR, XNOR)
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Part 2 : Derived Gates}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Part 2 \\ \hline
+\multicolumn{2}{|c|}{Derived Gates: xor, nand, nor, xnor} \\ \hline
+\multicolumn{2}{|l|}{File : \texttt{src/logical.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed: previously implemented gates only: \texttt{gate(), not(), and(), or()}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.5cm}
+
+\warningbox{
+    These gates must be built \textbf{using only the gates from Part 1}. Do not use raw boolean operators directly.
+}
+
+\subsection*{xor}
+Exclusive OR. Returns \texttt{true} if exactly one input is \texttt{true}.
+
+\begin{lstlisting}
+pub fn xor(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{2.7cm}
+
+\subsection*{nand}
+NOT AND. Returns the negation of the AND gate.
+
+\begin{lstlisting}
+pub fn nand(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{nor}
+NOT OR. Returns the negation of the OR gate.
+
+\begin{lstlisting}
+pub fn nor(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{xnor}
+Exclusive NOR. Returns the negation of the XOR gate.
+
+\begin{lstlisting}
+pub fn xnor(bit1: bool, bit2: bool) -> bool
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Output} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{true} \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter V — Part 3 : Adders (half_adder, full_adder)
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Part 3 : Adders}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Part 3 \\ \hline
+\multicolumn{2}{|c|}{Arithmetic Circuits: half\_adder, full\_adder} \\ \hline
+\multicolumn{2}{|l|}{File : \texttt{src/calc.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed: gates from \texttt{logical.rs}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.5cm}
+
+\infobox{
+    These functions implement binary addition circuits using the logic gates defined in \texttt{logical.rs}.
+}
+
+\subsection*{half\_adder}
+Takes two bits and returns a tuple \texttt{(carry, sum)}.
+
+\begin{lstlisting}
+pub fn half_adder(bit1: bool, bit2: bool) -> (bool, bool)
+\end{lstlisting}
+
+\texttt{Half adder function return 2 variables:}
+
+\begin{itemize}
+    \item \textbf{sum}
+    \item \textbf{carry}
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{Carry} & \textbf{Sum} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{2.5cm}
+
+\subsection*{full\_adder}
+Takes three bits (two operands and a carry-in) and returns \texttt{(carry, sum)}.
+
+\begin{lstlisting}
+pub fn full_adder(a: bool, b: bool, c: bool) -> (bool, bool)
+\end{lstlisting}
+
+\texttt{Full adder function return 2 variables:}
+
+\begin{itemize}
+    \item \textbf{sum}
+    \item \textbf{carry}
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\rowcolor{gray!20} \textbf{A} & \textbf{B} & \textbf{C\_in} & \textbf{Carry} & \textbf{Sum} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{false} & \texttt{false} & \texttt{false} \\ \hline
+\texttt{false} & \texttt{false} & \texttt{true} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{false} & \texttt{true} & \texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{false} & \texttt{false} & \texttt{true} \\ \hline
+\texttt{true} & \texttt{false} & \texttt{true} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{false} & \texttt{true} & \texttt{false} \\ \hline
+\texttt{true} & \texttt{true} & \texttt{true} & \texttt{true} & \texttt{true} \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Chapter VI — Part 4 : Multiplexer & Demultiplexer
+% ═════════════════════════════════════════════════════════════════════════════
+\chapter{Part 4 : Multiplexer \& Demultiplexer}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}X|}
+\hline
+\vspace{0.15cm} \includegraphics[width=1cm]{assets/pillar.png} \vspace{0.15cm} & Part 4 \\ \hline
+\multicolumn{2}{|c|}{Routing: multiplexer, demultiplexer} \\ \hline
+\multicolumn{2}{|l|}{File : \texttt{src/calc.rs}} \\ \hline
+\multicolumn{2}{|l|}{Allowed: gates from \texttt{logical.rs}} \\ \hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.5cm}
+
+\infobox{
+    These functions implement signal routing circuits. You may define private helper functions (e.g.\ a 3-input AND or a 4-input OR) inside \texttt{calc.rs}.
+}
+
+\subsection*{multiplexer}
+A 4-to-1 multiplexer. Selects one of the 4 inputs based on two selector bits \texttt{s0} and \texttt{s1}.
+
+\begin{lstlisting}
+pub fn multiplexer(inputs: Bits, s0: bool, s1: bool) -> bool
+\end{lstlisting}
+
+The selection logic is:
+\begin{itemize}
+    \item \texttt{s1=false, s0=false} $\rightarrow$ \texttt{inputs.i0}
+    \item \texttt{s1=false, s0=true} $\rightarrow$ \texttt{inputs.i1}
+    \item \texttt{s1=true, s0=false} $\rightarrow$ \texttt{inputs.i2}
+    \item \texttt{s1=true, s0=true} $\rightarrow$ \texttt{inputs.i3}
+\end{itemize}
+
+Implementation hint: each output is a 3-input AND of the corresponding input and the appropriate combination of selector / negated selector bits. The final result is the 4-input OR of all four AND results.
+
+\vspace{1.5cm}
+
+\subsection*{demultiplexer}
+A 1-to-4 demultiplexer. Routes a single input bit to one of 4 outputs based on selector bits.
+
+\begin{lstlisting}
+pub fn demultiplexer(bit: bool, s0: bool, s1: bool) -> Bits
+\end{lstlisting}
+
+Returns a \texttt{Bits} struct where only the selected output is set to the input value; all others are \texttt{false}.
+
+\begin{itemize}
+    \item \texttt{s1=false, s0=false} $\rightarrow$ output on \texttt{i0}
+    \item \texttt{s1=false, s0=true} $\rightarrow$ output on \texttt{i1}
+    \item \texttt{s1=true, s0=false} $\rightarrow$ output on \texttt{i2}
+    \item \texttt{s1=true, s0=true} $\rightarrow$ output on \texttt{i3}
+\end{itemize}
+
+\vspace{0.3cm}
+
+Example:
+\begin{lstlisting}
+let res = calc::demultiplexer(true, false, false);
+// Bits { i0: true, i1: false, i2: false, i3: false }
+\end{lstlisting}
+
+\chapter{Turn in and Submission}
+
+\vspace{0.5cm}
+
+Turn in all your files in a Git repository as usual. All files in your repository
+will be evaluated. Double-check your file names and make sure all required files are
+present in the repository.
+
+\warningbox{
+You must only turn in the files requested by the subject. Make sure you understand
+the Rust basics and be ready to correctly explain your code during evaluation.
+}
+
+
+\end{document}
