@@ -31,8 +31,12 @@
 *.vrb
 
 # Other
-target
-.lock
 .DS_Store
 .vscode
+
+# Temp
 correction_templates
+
+# Rust
+target
+.lock
