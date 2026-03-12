@@ -17,6 +17,7 @@
 \usepackage{tikz}
 \usepackage{tocloft}
 \usepackage{listings}
+\usepackage{packages/42boxes}
 
 \renewcommand{\thechapter}{\Roman{chapter}}
 
@@ -56,41 +57,7 @@
   urlcolor=black,
 }
 
-% ─── Warning / Info boxes as image + text overlay ───────────────────────────
-\newcommand{\warningbox}[2][\linewidth]{%
-  \begin{center}
-    \begin{tikzpicture}
-      \node[anchor=south west, inner sep=0] (img) at (0,0)
-        {\includegraphics[width=#1]{assets/warning.png}};
-      \node[
-        anchor=west,
-        align=left,
-        text width=0.72#1,
-        font=\normalsize,
-        xshift=0.16#1,
-        yshift=0cm
-      ] at (img.west) {#2};
-    \end{tikzpicture}
-  \end{center}
-}
 
-% ─── Warning / Info boxes as image + text overlay ───────────────────────────
-\newcommand{\infobox}[2][\linewidth]{%
-  \begin{center}
-    \begin{tikzpicture}
-      \node[anchor=south west, inner sep=0] (img) at (0,0)
-        {\includegraphics[width=#1]{assets/info.png}};
-      \node[
-        anchor=west,
-        align=left,
-        text width=0.72#1,
-        font=\normalsize,
-        xshift=0.16#1,
-        yshift=0cm
-      ] at (img.west) {#2};
-    \end{tikzpicture}
-  \end{center}
-}
 
 % ═════════════════════════════════════════════════════════════════════════════
 \begin{document}
